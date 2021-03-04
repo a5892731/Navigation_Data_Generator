@@ -8,7 +8,7 @@ import os
 
 class DataExport:
 
-    def __init__(self, data, FILE_ADDRESS, CALL_TYPE, FILE_FOLDER = "data_files"):
+    def __init__(self, data, FILE_ADDRESS, CALL_TYPE, FILE_FOLDER = "data_output"):
         self.list = []
         self.dicionary = {}
         self.call_type = CALL_TYPE
