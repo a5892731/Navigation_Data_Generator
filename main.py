@@ -16,13 +16,11 @@ from system.save_data_files import DataExport
 if __name__ == "__main__":
 
     ship = Object("SHIP_DATA_INPUT.txt")
-    ship.calculate_radians_for_latitud_and_longitude()
     ship.calculate_heading_rad()
 
     point = Object("POINT_DATA_INPUT.txt")
-    point.calculate_radians_for_latitud_and_longitude()
     point.calculate_distance_from_ship(ship)
-    point.calculate_fi()
+
 
     ship.calculate_angle_to_point(point)
 

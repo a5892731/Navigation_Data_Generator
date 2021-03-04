@@ -1,9 +1,9 @@
 latitude_deg: 54.559309
 latitude_rad: N/A
-longitude_deg: 18.548062
+longitude_deg: 18.548055
 longitude_rad: N/A
 distance_from_vessel: N/A
-distance_from_vessel_lat: 0.0
-distance_from_vessel_lon: 0.0
+distance_from_vessel_lat: N/A
+distance_from_vessel_lon: N/A
 fi_rad: N/A
 fi_deg: N/A
