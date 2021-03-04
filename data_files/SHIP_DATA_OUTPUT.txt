@@ -1,0 +1,8 @@
+latitude_deg: 54.559309
+latitude_rad: 0.9522395796629749
+longitude_deg: 18.548038
+longitude_rad: 0.32372433288502395
+heading_rad: 2.0943951023931953
+heading_deg: 120.0
+angle_to_point_rad: 2.0943951023931953
+angle_to_point_deg: 119.99999999999999
