@@ -10,7 +10,6 @@ from system.read_data_files import DataImport
 import os
 import math
 
-
 class Object:
     def __init__(self, FILE_ADDRESS, ):
         #latitude  szerokość geograficzna (Y)
@@ -20,58 +19,12 @@ class Object:
         self.data = self.convert_data_types(data())
         self.calculate_radians_for_latitud_and_longitude()
 
-
     def __call__(self):
             return self.data
-
-    def calculate_distance_from_ship(self, Ship):        #data camoatibility: World Geodetic System wgs84
-
-        e = 0.081819190842621
-        a = 6378137 # [m]
-
-        NC = (a * math.cos(self.data["latitude_rad"]) / (pow( (1 - e**2 * math.sin(self.data["latitude_rad"]**2)) , 1.0/2)))
-        M =  (a *(1 - e**2) / (pow( (1 - e**2 * math.sin(self.data["latitude_rad"]**2)) , 1.0/2))**3)
-
-        x = NC * (self.data["longitude_rad"] - Ship.data["longitude_rad"])
-        y = M  * (self.data["latitude_rad"] - Ship.data["latitude_rad"])
-
-        self.data["distance_from_vessel_lat"] = x # in meters
-        self.data["distance_from_vessel_lon"] = y # in meters
-        self.calculate_the_resultant_distance()
-        self.calculate_fi()
-
-    def simplified_calculate_distance_from_ship(self, Ship):  # with some small error (oval earth shape) for tests
-
-        earths_equator = 40075704
-        earths_equator_per_deg = earths_equator / 360
-
-        x = (self.data["longitude_deg"] - Ship.data["longitude_deg"]) * earths_equator_per_deg
-
-        y = ((self.data["latitude_deg"] - Ship.data["latitude_deg"]) * math.cos(self.data["longitude_rad"])) * earths_equator_per_deg
-
-        self.data["distance_from_vessel_lat"] = x # in meters
-        self.data["distance_from_vessel_lon"] = y # in meters
-        self.calculate_the_resultant_distance()
-        self.calculate_fi()
 
     def calculate_radians_for_latitud_and_longitude(self):
         self.data["latitude_rad"] = self.deg_to_rad(self.data["latitude_deg"])
         self.data["longitude_rad"] = self.deg_to_rad(self.data["longitude_deg"])
-
-    def calculate_fi(self): # angle of triangle
-        self.data["fi_rad"] = math.atan2(self.data["distance_from_vessel_lon"], self.data["distance_from_vessel_lat"])
-        self.data["fi_deg"] = self.rad_to_deg(self.data["fi_rad"])
-
-    def calculate_the_resultant_distance(self):
-        distance_from_vessel = math.sqrt((self.data["distance_from_vessel_lat"]**2) +
-                                         (self.data["distance_from_vessel_lon"]**2))
-        self.data["distance_from_vessel"] = distance_from_vessel
-
-    def calculate_angle_to_point(self, Point):
-        angle_sum_rad = self.data["heading_rad"] + Point.data["fi_rad"]
-        angle_sum_deg = self.rad_to_deg(angle_sum_rad)
-        self.data["angle_to_point_rad"] = angle_sum_rad
-        self.data["angle_to_point_deg"] = angle_sum_deg
 
 #--------------------------------------------------------------------------------------------
     def rad_to_deg(self, rad):
@@ -96,48 +49,86 @@ class Object:
             return float(input)
 
 
-class Schip(Object):
-    def calculate_heading_rad(self):
-        self.data["heading_rad"] = self.deg_to_rad(self.data["heading_deg"])
-
-    def calculate_angle_to_point(self, Point):
-        angle_sum_rad = self.data["heading_rad"] + Point.data["fi_rad"]
-        angle_sum_deg = self.rad_to_deg(angle_sum_rad)
-        self.data["angle_to_point_rad"] = angle_sum_rad
-        self.data["angle_to_point_deg"] = angle_sum_deg
-
-
-
 
 class GeograpficCalculathor:
     def __init__(self, Ship, Point):
         self.ship = Ship
         self.point = Point
+        self.calculate_heading_rad()
+        self.calculate_distance_from_ship()
 
+        dict = self.ship()
+        self.print_dict(dict)
+        dict = self.point()
+        self.print_dict(dict)
 
+    def calculate_distance_from_ship(self):        #data camoatibility: World Geodetic System wgs84
 
+        e = 0.081819190842621
+        a = 6378137 # [m]
 
+        NC = (a * math.cos(self.point.data["latitude_rad"]) /
+              (pow( (1 - e**2 * math.sin(self.point.data["latitude_rad"]**2)) , 1.0/2)))
+        M =  (a *(1 - e**2) /
+              (pow((1 - e**2 * math.sin(self.point.data["latitude_rad"]**2)), 1.0/2))**3)
 
+        x = NC * (self.point.data["longitude_rad"] - self.ship.data["longitude_rad"])
+        y = M  * (self.point.data["latitude_rad"] - self.ship.data["latitude_rad"])
 
+        self.point.data["distance_from_vessel_lat"] = x # in meters
+        self.point.data["distance_from_vessel_lon"] = y # in meters
+        self.calculate_the_resultant_distance()
+        self.calculate_fi()
+
+    def calculate_fi(self):  # angle of triangle
+        self.point.data["fi_rad"] = math.atan2(self.point.data["distance_from_vessel_lon"], self.point.data["distance_from_vessel_lat"])
+        self.point.data["fi_deg"] = self.rad_to_deg(self.point.data["fi_rad"])
+
+    def calculate_the_resultant_distance(self):
+        distance_from_vessel = math.sqrt((self.point.data["distance_from_vessel_lat"] ** 2) +
+                                         (self.point.data["distance_from_vessel_lon"] ** 2))
+        self.point.data["distance_from_vessel"] = distance_from_vessel
+
+    def calculate_heading_rad(self):
+        self.ship.data["heading_rad"] = self.deg_to_rad(self.ship.data["heading_deg"])
+
+    def calculate_angle_to_point(self, Point):
+        angle_sum_rad = self.ship.data["heading_rad"] + self.point.data["fi_rad"]
+        angle_sum_deg = self.ship.rad_to_deg(angle_sum_rad)
+        self.ship.data["angle_to_point_rad"] = angle_sum_rad
+        self.ship.data["angle_to_point_deg"] = angle_sum_deg
 
     def rad_to_deg(self, rad):
         return rad * 180 / math.pi
     def deg_to_rad(self, deg):
         return deg * math.pi / 180
 
+    def print_dict(dict):
+        for key in dict:
+            print("{}: {}".format(key, dict[key]))
+        print()
+
+
+class TestGeograpficCalculathor(GeograpficCalculathor):
+
+    def calculate_distance_from_ship(self, Ship):  # with some small error (oval earth shape) for tests
+
+        earths_equator = 40075704
+        earths_equator_per_deg = earths_equator / 360
+
+        x = (self.point.data["longitude_deg"] - self.ship.data["longitude_deg"]) * earths_equator_per_deg
+
+        y = ((self.point.data["latitude_deg"] - self.ship.data["latitude_deg"]) * math.cos(self.point.data["longitude_rad"])) * earths_equator_per_deg
+
+        self.point.data["distance_from_vessel_lat"] = x # in meters
+        self.point.data["distance_from_vessel_lon"] = y # in meters
+        self.point.calculate_the_resultant_distance()
+        self.point.calculate_fi()
 
 
 
 
 
-
-
-
-
-def print_dict(dict):
-    for key in dict:
-        print("{}: {}".format(key, dict[key]))
-    print()
 
 
 if __name__ == "__main__":
@@ -145,20 +136,13 @@ if __name__ == "__main__":
     os.chdir("..")
 
     ship = Object("SHIP_DATA_INPUT.txt")
-    ship.calculate_heading_rad()
     point = Object("POINT_DATA_INPUT.txt")
     point_simple = Object("POINT_DATA_INPUT.txt")
 
-    print("SHIP: ")
-    print_dict(ship())
-    print("TEST SIMPLIFIED POINT: ")
-    point_simple.simplified_calculate_distance_from_ship(ship)
+    GeograpficCalculathor(ship, point)
 
-    print_dict(point_simple())
-    print("POINT: ")
-    point.calculate_distance_from_ship(ship)
+    TestGeograpficCalculathor(ship, point_simple)
 
-    print_dict(point())
 
     os.chdir("system")
 
