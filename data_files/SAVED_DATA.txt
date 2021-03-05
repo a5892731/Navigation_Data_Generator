@@ -18,7 +18,7 @@ latitude_rad: N/A
 longitude_deg: 18.548038
 longitude_rad: N/A
 heading_rad: N/A
-heading_deg: 120.0Zatoka Gdańska
+heading_deg: 120.0
 angle_to_point_rad: N/A
 angle_to_point_deg: N/A
 
