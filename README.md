@@ -3,6 +3,17 @@ Distance and angle generator between two geographic points (WGS 84).
 
 
 ---------------------------------------
+To use this program make shure that input data files have corect data.
 
-in nex version will by used:
-https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/intro-to-coordinate-reference-systems-python/
+SHIP_DATA_INPUT.txt
+latitude_deg: XX.XXXXXXXXXXXXXXXX
+longitude_deg: XX.XXXXXXXXXXXXXXXX
+heading_deg: XXX.XX
+
+POINT_DATA_INPUT.txt
+latitude_deg: XX.XXXXXXXXXXXXXXXX
+longitude_deg: XX.XXXXXXXXXXXXXXXX
+
+rest of data is for creating a object dictionary's in corect order.
+
+---------------------------------------
