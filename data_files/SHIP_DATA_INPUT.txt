@@ -1,3 +1,8 @@
 latitude_deg: 54.54140153749691
+latitude_rad: N/A
 longitude_deg: 19.220498479286334
-heading_deg: 0
+longitude_rad: N/A
+heading_rad: N/A
+heading_deg: 0.0
+angle_to_point_rad: N/A
+angle_to_point_deg: N/A

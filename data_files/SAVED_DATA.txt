@@ -7,8 +7,8 @@ longitude_rad: N/A
 distance_from_vessel: N/A
 distance_from_vessel_lat: N/A
 distance_from_vessel_lon: N/A
-fi_rad: N/A
-fi_deg: N/A
+triangle_angle_deg: N/A
+triangle_angle_rad: N/A
 
 
 SHIP:
